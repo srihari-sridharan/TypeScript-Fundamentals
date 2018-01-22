@@ -10,10 +10,11 @@
     - [TypeScript Features](#typescript-features)
         - [What is TypeScript?](#what-is-typescript)
         - [TypeScript to JavaScript](#typescript-to-javascript)
-    - [Syntax](#syntax)
-    - [Keywords and Operators](#keywords-and-operators)
-    - [Code Hierarchy](#code-hierarchy)
-    - [Framework Options and Tools](#framework-options-and-tools)
+    [The Fundamentals](#the-fundamentals))
+        - [Syntax](#syntax)
+        - [Keywords and Operators](#keywords-and-operators)
+        - [Code Hierarchy](#code-hierarchy)
+        - [Framework Options and Tools](#framework-options-and-tools)
     - [Basic Types](#basic-types)
         - [Boolean](#boolean)
         - [Number](#number)
@@ -154,7 +155,9 @@ button.onclick = function () {
 document.body.appendChild(button);
 ```
 
-## Syntax
+## The Fundamentals
+
+### Syntax
 
 * Being superset of JavaScript - follows the same syntax rules:
     * `;` ends an expression
@@ -162,7 +165,7 @@ document.body.appendChild(button);
 * Most of JavaScript key words hold good.
 * Remember: TS is super set of JS - meaning every valid JS code is a valid TS code.
 
-## Keywords and Operators
+### Keywords and Operators
 
 * `class` - Container for members such as properties and functions
 * `constructor` - Provides initialization functionality in a class
@@ -178,7 +181,7 @@ document.body.appendChild(button);
 * `<type-name>` - < > characters use to cast/convert between types
 * `:` - Separator between variable/parameter names and types
 
-## Code Hierarchy
+### Code Hierarchy
 
 * Module/Namespaces
     * Classes (implement interfaces)
@@ -187,7 +190,7 @@ document.body.appendChild(button);
         * Properties
         * Functions
 
-## Framework Options and Tools
+### Framework Options and Tools
 
 * Node.js
 * TypeScript Playground
