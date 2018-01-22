@@ -10,7 +10,7 @@
     - [TypeScript Features](#typescript-features)
         - [What is TypeScript?](#what-is-typescript)
         - [TypeScript to JavaScript](#typescript-to-javascript)
-    [The Fundamentals](#the-fundamentals))
+    - [The Fundamentals](#the-fundamentals))
         - [Syntax](#syntax)
         - [Keywords and Operators](#keywords-and-operators)
         - [Code Hierarchy](#code-hierarchy)
@@ -29,7 +29,7 @@
         - [Type assertions](#type-assertions)
         - [A note about `let`](#a-note-about-let)
         - [Ambient Declarations](#ambient-declarations)
-    - [Type Definition Files](#type-definition-files)
+        - [Type Definition Files](#type-definition-files)
     - [Object Types](#object-types)
     - [Functions](#functions)
     - [Classes](#classes)
@@ -55,7 +55,7 @@
             - [Import a single export from a module](#import-a-single-export-from-a-module)
             - [Import the entire module into a single variable, and use it to access the module exports](#import-the-entire-module-into-a-single-variable-and-use-it-to-access-the-module-exports)
             - [Import a module for side-effects only](#import-a-module-for-side-effects-only)
-    - [Namespaces](#namespaces)
+        - [Namespaces](#namespaces)
         - [Alias Names](#alias-names)
     - [Further Reading](#further-reading)
 
@@ -404,7 +404,6 @@ _Type assertions_ are a way to tell the compiler “trust me, I know what I’m 
 Type assertions have two forms. One is the _“angle-bracket”_ syntax:
 ```TS
 let someValue: any = "this is a string";
-
 let strLength: number = (<string>someValue).length;
 ```
 
@@ -437,7 +436,7 @@ Equivalent JavaScript code:
 document.title = "Hello";
 ```
 
-## Type Definition Files
+### Type Definition Files
 * As you work with the DOM or other libraries you need a Type Definition file (`*.d.ts` file)
 * `lib.d.ts` file is built-in out of the box for the DOM and JavaScript
 * Additional Type Definition files for 3rd party scripts can be found at:
@@ -881,7 +880,7 @@ let myValidator = new validator.ZipCodeValidator();
 import "./my-module.js";
 ```
 
-## Namespaces
+### Namespaces
 
 * Namespaces (previously internal modules) are used to organize code in TypeScript.
 * Additionally, anywhere the `module` keyword was used when declaring an internal module, the `namespace` keyword can and should be used instead.
