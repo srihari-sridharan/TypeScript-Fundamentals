@@ -584,7 +584,7 @@ class Car {
 
 ### Complex Types
 
-* Complex / user defined types can be used for a variable.
+* Complex / user defined types can be used for declaring a variable.
 
 ```TS
 class Engine {
