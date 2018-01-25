@@ -465,7 +465,7 @@ $("div").text(data);
 
 ```TS
 // Object literals
-var square = { h: 10, w: 20 };
+var rectangle = { h: 10, w: 20 };
 var points: Object = { x: 10, y: 20 };
 
 // Functions
