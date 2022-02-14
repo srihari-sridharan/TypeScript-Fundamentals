@@ -1,5 +1,9 @@
 # TypeScript Fundamentals
 
+As of TypeScript V 4.5.4 - 2022 02 14 - I ❤️ TypeScript!
+
+To try code samples, copy a snippet and paste it in [TypeScript Playground](https://www.typescriptlang.org/play) and hit 'Run'! Observe the 'JS' and 'Logs' tabs on the right side!
+
 - [TypeScript](#typescript)
     - [Need for TypeScript!](#need-for-typescript)
         - [JavaScript vs. Maintainability!](#javascript-vs-maintainability)
@@ -28,7 +32,6 @@
         - [Never](#never)
         - [Type assertions](#type-assertions)
         - [A note about `let`](#a-note-about-let)
-        - [Ambient Declarations](#ambient-declarations)
         - [Type Definition Files](#type-definition-files)
     - [Object Types](#object-types)
     - [Functions](#functions)
@@ -95,7 +98,8 @@ Importance of source code maintainability!
 
 ### What is TypeScript?
 
-* https://www.typescriptlang.org/index.html defines it as - "Typescript is a superset of JavaScript that complies to plain JavaScript."
+* [The TypeScript site](https://www.typescriptlang.org) defines it as - "TypeScript is JavaScript with syntax for types. TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale."
+
 * Flexible Options
     * Any Browser
     * Any Host
@@ -112,7 +116,7 @@ Importance of source code maintainability!
     * Intellisense and syntax checking
 
 ### TypeScript to JavaScript
-```TS
+```typescript
 // Source TypeScript
 class Greeter {
     greeting: string;
@@ -125,34 +129,22 @@ class Greeter {
 }
 
 let greeter = new Greeter("world");
-
-let button = document.createElement('button');
-button.textContent = "Say Hello";
-button.onclick = function() {
-    alert(greeter.greet());
-}
-
-document.body.appendChild(button);
+alert(greeter.greet());
 ```
 
 ```JavaScript
 // Generated JavaScript
-var Greeter = /** @class */ (function () {
-    function Greeter(message) {
+"use strict";
+class Greeter {
+    constructor(message) {
         this.greeting = message;
     }
-    Greeter.prototype.greet = function () {
+    greet() {
         return "Hello, " + this.greeting;
-    };
-    return Greeter;
-}());
-var greeter = new Greeter("world");
-var button = document.createElement('button');
-button.textContent = "Say Hello";
-button.onclick = function () {
-    alert(greeter.greet());
-};
-document.body.appendChild(button);
+    }
+}
+let greeter = new Greeter("world");
+alert(greeter.greet());
 ```
 
 ## The Fundamentals
@@ -160,7 +152,7 @@ document.body.appendChild(button);
 ### Syntax
 
 * Being superset of JavaScript - follows the same syntax rules:
-    * `;` ends an expression
+    * `;` ends an expression, but it is optional and follows the same rules as JavaScript
     * {} brackets define the code blocks
 * Most of JavaScript key words hold good.
 * Remember: TS is super set of JS - meaning every valid JS code is a valid TS code.
@@ -206,7 +198,7 @@ document.body.appendChild(button);
 
 The most basic datatype is the simple true/false value, which JavaScript and TypeScript call a `boolean` value.
 
-```TS
+```typescript
 let isDone: boolean = false;
 ```
 
@@ -214,7 +206,7 @@ let isDone: boolean = false;
 
 As in JavaScript, all numbers in TypeScript are floating point values. These floating point numbers get the type number. In addition to hexadecimal and decimal literals, TypeScript also supports binary and octal literals introduced in ECMAScript 2015.
 
-```TS
+```typescript
 let decimal: number = 64;
 let hex: number = 0xf01d;
 let binary: number = 0b1110;
@@ -225,7 +217,7 @@ let octal: number = 0o734;
 
 As in other languages, we use the type string to refer to these textual datatypes. Just like JavaScript, TypeScript also uses double quotes (") or single quotes (') to surround string data.
 
-```TS
+```typescript
 let color: string = "blue";
 color = 'red';
 
@@ -235,92 +227,134 @@ let age: number = 30;
 let sentence: string = `Hello, my name is ${ fullName }.
 
 I'll be ${ age + 1 } years old next year.`;
+console.log(sentence);
 ```
 
 ### Arrays
 
 2 ways of declaring arrays!
 
-```TS
+```typescript
 // 1. Using []  syntax
-let numbers: number[] = [1, 2, 3, 4 , 5];
+let numbers1: number[] = [1, 2, 3, 4 , 5];
 
 // 2. Using Array<Type> syntax
-let numbers: Array<number> = [1, 2, 3, 4 , 5];
+let numbers2: Array<number> = [1, 2, 3, 4 , 5];
 ```
 
 ### Tuple
 
 Tuple types allow you to express an array where the type of a fixed number of elements is known, but need not be the same. For example, you may want to represent a value as a pair of a string and a number:
 
-```TS
+```typescript
 // Declare a tuple type
 let x: [string, number];
 // Initialize it
 x = ["hello", 10]; // OK
 // Initialize it incorrectly
-x = [10, "hello"]; // Error
+x = [10, "hello"]; // Error, Type 'string' is not assignable to type 'number'.
 ```
 
 When accessing an element with a known index, the correct type is retrieved:
 
-```TS
+```typescript
 console.log(x[0].substr(1)); // OK
-console.log(x[1].substr(1)); // Error, 'number' does not have 'substr'
+console.log(x[1].substr(1)); // Error, Property 'substr' does not exist on type 'number'.
 ```
 
 When accessing an element outside the set of known indices, a union type is used instead:
 
-```TS
-x[3] = "world"; // OK, 'string' can be assigned to 'string | number'
+```typescript
+x[3] = "world"; // Error, Tuple type '[string, number]' of length '2' has no element at index '3'.
 console.log(x[5].toString()); // OK, 'string' and 'number' both have 'toString'
-x[6] = true; // Error, 'boolean' isn't 'string | number'
+x[6] = true; // Error, Tuple type '[string, number]' of length '2' has no element at index '6'.
 ```
 
 ### Enum
 
-A helpful addition to the standard set of datatypes from JavaScript is the enum. As in languages like C#, an enum is a way of giving more friendly names to sets of numeric values.
+A helpful addition to the standard set of data types from JavaScript is the enum. As in languages like C#, an enum is a way of giving more friendly names to sets of numeric values.
 
-```TS
+```typescript
+enum Days {
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday,
+  Sunday
+}
+```
+
+The equivalent JavaScript looks like:
+
+```javascript
+"use strict";
+var Days;
+(function (Days) {
+    Days[Days["Monday"] = 0] = "Monday";
+    Days[Days["Tuesday"] = 1] = "Tuesday";
+    Days[Days["Wednesday"] = 2] = "Wednesday";
+    Days[Days["Thursday"] = 3] = "Thursday";
+    Days[Days["Friday"] = 4] = "Friday";
+    Days[Days["Saturday"] = 5] = "Saturday";
+    Days[Days["Sunday"] = 6] = "Sunday";
+})(Days || (Days = {}));
+```
+
+Another example below:
+
+```typescript
 enum Color {Red, Green, Blue}
 let c: Color = Color.Green;
+console.log(c);
+
+// Try this yourself
+console.log(Color); // Interesting isn't it?
 ```
 
 By default, enums begin numbering their members starting at 0. You can change this by manually setting the value of one of its members. For example, we can start the previous example at 1 instead of 0:
 
-```TS
+```typescript
 enum Color {Red = 1, Green, Blue}
 let c: Color = Color.Green;
+console.log(c);
 ```
 
 Or, even manually set all the values in the enum:
 
-```TS
+```typescript
 enum Color {Red = 1, Green = 2, Blue = 4}
 let c: Color = Color.Green;
+console.log(c);
 ```
 
 A handy feature of enums is that you can also go from a numeric value to the name of that value in the enum. For example, if we had the value 2 but weren’t sure what that mapped to in the Color enum above, we could look up the corresponding name:
 
-```TS
+```typescript
 enum Color {Red = 1, Green, Blue}
 let colorName: string = Color[2];
-alert(colorName); // Displays 'Green' as it's value is 2 above
+console.log(colorName); // Displays 'Green' as it's value is 2 above. Remember how it is stored as an object in JS? If not try console.log(Color); now.
+console.log(Color);
+console.log(Color.Blue);
 ```
 
 ### Any
 
 We may need to describe the type of variables that we do not know when we are writing an application. These values may come from dynamic content, e.g. from the user or a 3rd party library. In these cases, we want to opt-out of type-checking and let the values pass through compile-time checks. To do so, we label these with the any type:
 
-```TS
+```typescript
 let notSure: any = 4;
 notSure = "maybe a string instead";
+console.log(notSure);
+
 notSure = false; // okay, definitely a boolean
+console.log(notSure);
 ```
 
 The `any` type is a powerful way to work with existing JavaScript, allowing you to gradually opt-in and opt-out of type-checking during compilation. You might expect Object to play a similar role, as it does in other languages. But variables of type Object only allow you to assign any value to them - you can’t call arbitrary methods on them, even ones that actually exist:
 
-```TS
+```typescript
 let notSure: any = 4;
 notSure.ifItExists(); // okay, ifItExists might exist at runtime
 notSure.toFixed(); // okay, toFixed exists (but the compiler doesn't check)
@@ -331,43 +365,52 @@ prettySure.toFixed(); // Error: Property 'toFixed' doesn't exist on type 'Object
 
 The any type is also handy if you know some part of the type, but perhaps not all of it. For example, you may have an array but the array has a mix of different types:
 
-```TS
+```typescript
 let list: any[] = [1, true, "free"];
+console.log(list[0]);
+console.log(list[1]);
 list[1] = 100;
+console.log(list[1]);
+console.log(list[2]);
 ```
 
 ### Void
 
-`void` is a little like the opposite of any: the absence of having any type at all. You may commonly see this as the return type of functions that do not return a value:
+`void` is a little like the opposite of `any`: the absence of having any type at all. You may commonly see this as the return type of functions that do not return a value:
 
-```TS
+```typescript
 function warnUser(): void {
-    alert("This is my warning message");
+    alert("This is my warning message!");
 }
+
+warnUser();
 ```
 
-Declaring variables of type void is not useful because you can only assign undefined or null to them:
+Declaring variables of type void is not useful because you can only assign `undefined` or `null` to them:
 
-```TS
+```typescript
 let unusable: void = undefined;
+console.log(unusable); // :D
+unusable = 10; // Error: Type 'number' is not assignable to type 'void'.
 ```
 
 ### Null and Undefined
 
 In TypeScript, both `undefined` and `null` actually have their own types named `undefined` and `null` respectively. Much like `void`, they’re not extremely useful on their own:
 
-```TS
-// Not much else we can assign to these variables!
+```typescript
+// Can't assign to these variables!
 let u: undefined = undefined;
 let n: null = null;
+console.log(u);
+console.log(n);
 ```
 
-By default null and undefined are subtypes of all other types. That means you can assign null and undefined to something like number.
+By default `null` and `undefined` are subtypes of all other types. That means you can assign `null` and `undefined` to something like number.
 
+However, when using the `--strictNullChecks` flag, `null` and `undefined` are only assignable to void and their respective types. This helps avoid many common errors. In cases where you want to pass in either a `string` or `null` or `undefined`, you can use the union type `string | null | undefined`.
 
-However, when using the --strictNullChecks flag, null and undefined are only assignable to void and their respective types. This helps avoid many common errors. In cases where you want to pass in either a string or null or undefined, you can use the union type string | null | undefined.
-
-> As a note: we encourage the use of --strictNullChecks when possible, but for the purposes of this handbook, we will assume it is turned off.
+> As a note: we encourage the use of `--strictNullChecks` when possible, but for the purposes of this handbook, we will assume it is turned off.
 
 ### Never
 
@@ -377,7 +420,7 @@ The `never` type is a subtype of, and assignable to, every type; however, no typ
 
 Some examples of functions returning `never`:
 
-```TS
+```typescript
 // Function returning never must have unreachable end point
 function error(message: string): never {
     throw new Error(message);
@@ -401,56 +444,16 @@ Sometimes you’ll end up in a situation where you’ll know more about a value 
 
 _Type assertions_ are a way to tell the compiler “trust me, I know what I’m doing.” A type assertion is like a type cast in other languages, but performs no special checking or restructuring of data. It has no runtime impact, and is used purely by the compiler. TypeScript assumes that you, the programmer, have performed any special checks that you need.
 
-Type assertions have two forms. One is the _“angle-bracket”_ syntax:
-```TS
+```typescript
 let someValue: any = "this is a string";
-let strLength: number = (<string>someValue).length;
+let str: string = someValue as string;
+let strLength: number = (str).length;
+console.log(strLength);
 ```
-
-And the other is the _as_-syntax:
-
-```TS
-let someValue: any = "this is a string";
-let strLength: number = (someValue as string).length;
-```
-
-The two samples are equivalent. Using one over the other is mostly a choice of preference; however, when using TypeScript with JSX, only as-style assertions are allowed.
 
 ### A note about `let`
 
 You may have noticed that so far, we’ve been using the `let` keyword instead of JavaScript’s `var` keyword which you might be more familiar with. The `let` keyword is actually a newer JavaScript construct that TypeScript makes available. Many common problems in JavaScript are alleviated by using `let`, as it is block scoped, so you should use it instead of `var` whenever possible. `var` is function scoped!
-
-### Ambient Declarations
-
-Use `declare` keyword for ambient declarations.
-
-```TS
-// lib.d.ts is referenced by default and contains references for the DOM and JavaScript
-declare var document;
-document.title = "Hello";
-```
-
-Equivalent JavaScript code:
-```JS
-// Ambient Declarations do not appear anywhere in the JavaScript
-document.title = "Hello";
-```
-
-### Type Definition Files
-* As you work with the DOM or other libraries you need a Type Definition file (`*.d.ts` file)
-* `lib.d.ts` file is built-in out of the box for the DOM and JavaScript
-* Additional Type Definition files for 3rd party scripts can be found at:
-    * https://github.com/borisyankov/DefinitelyTyped
-    * http://definitelytyped.org/
-* Use `// <reference />` as shown below.
-
-```TS
-/// <reference path="jquery.d.ts" />
-declare var  $;
-
-var data = "Hello Srihari";
-$("div").text(data);
-```
 
 ## Object Types
 
@@ -463,21 +466,27 @@ $("div").text(data);
     * Construct signatures
     * Index Signatures
 
-```TS
+```typescript
 // Object literals
-var rectangle = { h: 10, w: 20 };
-var points: Object = { x: 10, y: 20 };
+let rectangle = { h: 10, w: 20 };
+let points: Object = { x: 10, y: 20 };
 
 // Functions
-var multiply = function(x: number, y: number) {
+let multiply = function(x: number, y: number) {
     return x * y;
 };
 
 // Declared as type 'Function'!
-var square : Function;
+let square : Function;
 square = function(x: number) {
     return x * x;
 };
+
+console.log(multiply(2,3));
+console.log(square(2));
+
+console.log(rectangle);
+console.log(points);
 ```
 
 ## Functions
@@ -490,41 +499,46 @@ square = function(x: number) {
 * Void
     * Used as the return type for functions that return no value
 
-```TS
+```typescript
 // TypeScript Code
-var areaOfRectangle = function(h: number, w: number) {
+let areaOfRectangle1 = function(h: number, w: number) {
     return h * w;
 };
 
 // The above function can be simplified using arrow function as () => {};
-var areaOfRectangle = (h: number, w: number) => h * w;
+let areaOfRectangle2 = (h: number, w: number) => h * w;
+
+console.log(areaOfRectangle1(2,3));
+console.log(areaOfRectangle2(2,3));
 ```
 
 ```JS
-// Emits the JavaScript Code
-var areaOfRectangle = function (h, w) { 
-    return h *  w;
+"use strict";
+let areaOfRectangle1 = function (h, w) {
+    return h * w;
 };
+// The above function can be simplified using arrow function as () => {};
+let areaOfRectangle2 = (h, w) => h * w;
+console.log(areaOfRectangle1(2, 3));
+console.log(areaOfRectangle2(2, 3));
 ```
 
-```TS
+```typescript
 // void used as return type for functions that return no value
-var greet: (msg: string) => void;
+let greet: (msg: string) => void;
 greet = (message) => console.log(message);
 greet("Hello!");
 ```
 
-> Note: the declaration for variable `greet`. This can be seen as a delegate definition as in `C#`. greet can point to any function that satisfies this signature. `(msg: string) => void;`
+> Note: the declaration for variable `greet`. This can be seen as a delegate definition as in `C#`. `greet` can point to any function that satisfies this signature. `(msg: string) => void;`
 
 ```JS
 // Emits the JavaScript Code
+"use strict";
 var greet;
-greet = function (message) { 
-    return console.log(message); 
-};
+greet = (message) => console.log(message);
 greet("Hello!");
 ```
-
 
 ## Classes
 
@@ -537,7 +551,7 @@ greet("Hello!");
     * Properties
     * Functions
 
-```TS
+```typescript
 class Car{
     engine: string;
 
@@ -563,7 +577,7 @@ class Car{
 ```
 * Properties can be defined as shown below. Note: you might need a backing variable.
 
-```TS
+```typescript
 class Car {
     private _engine: string;
 
@@ -586,7 +600,7 @@ class Car {
 
 * Complex / user defined types can be used for declaring a variable.
 
-```TS
+```typescript
 class Engine {
     constructor(
         public horsePower: number,
@@ -607,20 +621,20 @@ class Car {
 
 * Types are instantiated using the `new` keyword.
 
-```TS
+```typescript
 var engine = new Engine(300, 'V8');
 var car = new Car(engine);
 ```
 
 ### Casting Types
 
-```TS
+```typescript
 // This fails as HTMLElement cannot be assigned to HTMLTableElement
 var table: HTMLTableElement = document.createElement('table'); // Error
 ```
 
 * Cast `HTMLElement` to `HTMLTableElement`
-```TS
+```typescript
 var table: HTMLTableElement = <HTMLTableElement>document.createElement('table');
 ```
 
@@ -629,7 +643,7 @@ var table: HTMLTableElement = <HTMLTableElement>document.createElement('table');
 * Types can be extended using the TypeScript `extends` keyword
 * Child class constructor must call base class (`super`) constructor
 
-```TS
+```typescript
 class ChildClass extends ParentClass {
     constructor() {
         super();
@@ -637,7 +651,7 @@ class ChildClass extends ParentClass {
 }
 ```
 
-```TS
+```typescript
 // Example
 class Auto { 
     engine: Engine;
@@ -665,7 +679,7 @@ class Truck extends Auto {
 
 * E.g. A factory requires that all engines being built have a standard "interface".
 
-```TS
+```typescript
 interface IEngine { 
     start(callback: (startStatus: boolean, engineType: string) => void) : void;
     stop(callback: (stopStatus: boolean, engineType: string) => void) : void;
@@ -680,7 +694,7 @@ interface IEngine {
 
 
 ### Optional Members
-```TS
+```typescript
 interface IAutoOptions { 
     engine: IEngine;
     basePrice: number;
@@ -697,7 +711,7 @@ interface IAutoOptions {
 
 * Interfaces provide a way to enforce a `contract`
 
-```TS
+```typescript
 class Engine  implements IEngine {
     constructor(public horsePower: number, public engineType: string) { }
 
@@ -719,7 +733,7 @@ class Engine  implements IEngine {
 
 * Interfaces help ensure that proper data is passed.
 
-```TS
+```typescript
 class Auto { 
     engine: IEngine; 
     basePrice: number;
@@ -738,7 +752,7 @@ class Auto {
 
 * Extend the definition of an existing interface.
 
-```TS
+```typescript
 interface IAutoOptions {
     engine: IEngine; 
     basePrice: number; 
@@ -759,7 +773,7 @@ interface ITruckOptions extends IAutoOptions {
 
 * The class Truck takes `ITruckOptions` as input.
 
-```TS
+```typescript
 class Truck extends Auto {
     bedLength: string;
     fourByFour: boolean;
@@ -797,7 +811,7 @@ In TypeScript, just as in ECMAScript 2015, any file containing a top-level impor
 
 * Any declaration (such as a variable, function, class, type alias, or interface) can be exported by adding the export keyword.
 
-```TS
+```typescript
 // Code in Validation.ts
 export interface StringValidator {
     isAcceptable(s: string): boolean;
@@ -816,7 +830,7 @@ export class ZipCodeValidator implements StringValidator {
 
 * Export statements are handy when exports need to be renamed for consumers.
 
-```TS
+```typescript
 class ZipCodeValidator implements StringValidator {
     isAcceptable(s: string) {
         return s.length === 5 && numberRegexp.test(s);
@@ -830,7 +844,7 @@ export { ZipCodeValidator as mainValidator };
 #### Re-exports
 *  A re-export does not import it locally, or introduce a local variable.
 
-```TS
+```typescript
 export class ParseIntBasedZipCodeValidator {
     isAcceptable(s: string) {
         return s.length === 5 && parseInt(s).toString() === s;
@@ -843,7 +857,7 @@ export {ZipCodeValidator as RegExpBasedZipCodeValidator} from "./ZipCodeValidato
 
  * A module can wrap one or more modules and combine all their exports using export * from "module" syntax.
 
-```TS
+```typescript
 // Code in AllValidators.ts
 export * from "./StringValidator"; // exports interface 'StringValidator'
 export * from "./LettersOnlyValidator"; // exports class 'LettersOnlyValidator'
@@ -856,7 +870,7 @@ export * from "./ZipCodeValidator";  // exports class 'ZipCodeValidator'
 
 #### Import a single export from a module
 
-```TS
+```typescript
 import { ZipCodeValidator } from "./ZipCodeValidator";
 let myValidator = new ZipCodeValidator();
 
@@ -867,7 +881,7 @@ let myValidator = new ZCV();
 
 #### Import the entire module into a single variable, and use it to access the module exports
 
-```TS
+```typescript
 import * as validator from "./ZipCodeValidator";
 let myValidator = new validator.ZipCodeValidator();
 ```
@@ -876,7 +890,7 @@ let myValidator = new validator.ZipCodeValidator();
 
 * Though not recommended practice, some modules set up some global state that can be used by other modules. These modules may not have any exports, or the consumer is not interested in any of their exports. To import these modules, use:
 
-```TS
+```typescript
 import "./my-module.js";
 ```
 
@@ -887,7 +901,7 @@ import "./my-module.js";
 
 * What happens behind the scenes?
 
-```TS
+```typescript
 namespace App.Shapes {
     export class Rectangle {
         constructor(public height: number, public width: number) { }
@@ -914,7 +928,7 @@ var App;
 
 * Code in a single file.
 
-```TS
+```typescript
 // Code in validation.ts
 namespace Validation {
     export interface StringValidator {
@@ -940,7 +954,7 @@ namespace Validation {
 
 * Hard to maintain in a single file. Can be split across files.
 
-```TS
+```typescript
 // Code in Validation.ts
 namespace Validation {
     export interface StringValidator {
@@ -949,7 +963,7 @@ namespace Validation {
 }
 ```
 
-```TS
+```typescript
 // Code in LettersOnlyValidator.ts
 /// <reference path="Validation.ts" />
 namespace Validation {
@@ -962,7 +976,7 @@ namespace Validation {
 }
 ```
 
-```TS
+```typescript
 // Code in ZipCodeValidator.ts
 /// <reference path="Validation.ts" />
 namespace Validation {
@@ -975,7 +989,7 @@ namespace Validation {
 }
 ```
 
-```TS
+```typescript
 // Code in Test.ts
 /// <reference path="Validation.ts" />
 /// <reference path="LettersOnlyValidator.ts" />
@@ -1017,7 +1031,7 @@ for (let s of strings) {
 
 * Using alias names to shorten lengthy namespace parts:
 
-```TS
+```typescript
 namespace Shapes {
     export namespace Polygons {
         export class Triangle { }
@@ -1030,26 +1044,6 @@ let sq = new polygons.Square(); // Same as 'new Shapes.Polygons.Square()'
 ```
 
 ## Further Reading
-Please consider perusing the below topics from **'TypeScript Handbook'**
-* [Basic Types](https://www.typescriptlang.org/docs/handbook/basic-types.html)
-* [Variable Declarations](https://www.typescriptlang.org/docs/handbook/variable-declarations.html)
-* [Interfaces](https://www.typescriptlang.org/docs/handbook/interfaces.html)
-* [Classes](https://www.typescriptlang.org/docs/handbook/classes.html)
-* [Functions](https://www.typescriptlang.org/docs/handbook/functions.html)
-* [Generics](https://www.typescriptlang.org/docs/handbook/generics.html)
-* [Enums](https://www.typescriptlang.org/docs/handbook/enums.html)
-* [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)
-* [Type Compatibility](https://www.typescriptlang.org/docs/handbook/type-compatibility.html)
-* [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
-* [Symbols](https://www.typescriptlang.org/docs/handbook/symbols.html)
-* [Iterators and Generators](https://www.typescriptlang.org/docs/handbook/iterators-and-generators.html)
-* [Modules](https://www.typescriptlang.org/docs/handbook/modules.html)
-* [Namespaces](https://www.typescriptlang.org/docs/handbook/namespaces.html)
-* [Namespaces and Modules](https://www.typescriptlang.org/docs/handbook/namespaces-and-modules.html)
-* [Module Resolution](https://www.typescriptlang.org/docs/handbook/module-resolution.html)
-* [Declaration Merging](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
-* [JSX](https://www.typescriptlang.org/docs/handbook/jsx.html)
-* [Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html)
-* [Mixins](https://www.typescriptlang.org/docs/handbook/mixins.html)
-* [Triple-Slash Directives](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html)
-* [Type Checking JavaScript Files](https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html)
+Please consider perusing the [**'TypeScript Handbook'**](https://www.typescriptlang.org/docs/handbook/intro.html)
+
+Use the [TypeScript Playground](https://www.typescriptlang.org/play)!
