@@ -32,14 +32,12 @@ To try code samples, copy a snippet and paste it in [TypeScript Playground](http
         - [Never](#never)
         - [Type assertions](#type-assertions)
         - [A note about `let`](#a-note-about-let)
-        - [Type Definition Files](#type-definition-files)
     - [Object Types](#object-types)
     - [Functions](#functions)
     - [Classes](#classes)
         - [Defining a Class](#defining-a-class)
         - [Complex Types](#complex-types)
         - [Instantiating a Type](#instantiating-a-type)
-        - [Casting Types](#casting-types)
     - [Extending Types - Inheritance](#extending-types---inheritance)
     - [Interfaces](#interfaces)
         - [Optional Members](#optional-members)
@@ -559,7 +557,11 @@ class Car{
         this.engine = engine;
     }
 }
+const c:Car = new Car("Ford");
+console.log(c);
+```
 
+```typescript
 // Can be simplified as
 class Car{
     // Shorthand way to declare a field
@@ -574,7 +576,13 @@ class Car{
         return "Stopped " + this.engine; 
     }
 }
+
+const c = new Car("MPFI");
+console.log(c);
+console.log(c.start());
+console.log(c.stop());
 ```
+
 * Properties can be defined as shown below. Note: you might need a backing variable.
 
 ```typescript
@@ -590,10 +598,17 @@ class Car {
     }
 
     set engine(value: string) {
-        if (value == undefined) throw 'Supply an Engine!';
+        if (value == '') throw 'Supply an Engine!';
         this._engine = value; 
     }
 }
+
+const c = new Car("MPFI");
+console.log(c);
+console.log(c.engine);
+// c.engine = ''; // Uncomment and check
+c.engine = 'SPFI';
+console.log(c.engine);
 ```
 
 ### Complex Types
@@ -622,20 +637,9 @@ class Car {
 * Types are instantiated using the `new` keyword.
 
 ```typescript
-var engine = new Engine(300, 'V8');
-var car = new Car(engine);
-```
-
-### Casting Types
-
-```typescript
-// This fails as HTMLElement cannot be assigned to HTMLTableElement
-var table: HTMLTableElement = document.createElement('table'); // Error
-```
-
-* Cast `HTMLElement` to `HTMLTableElement`
-```typescript
-var table: HTMLTableElement = <HTMLTableElement>document.createElement('table');
+let engine = new Engine(300, 'V8');
+let car = new Car(engine);
+console.log(car);
 ```
 
 ## Extending Types - Inheritance
@@ -652,7 +656,13 @@ class ChildClass extends ParentClass {
 ```
 
 ```typescript
-// Example
+class Engine {
+    constructor(
+        public horsePower: number,
+        public engineType: string
+    ) { }
+}
+
 class Auto { 
     engine: Engine;
     constructor(engine: Engine) {
@@ -668,6 +678,11 @@ class Truck extends Auto {
         this.fourByFour = fourByFour; 
     }
 }
+
+const engine = new Engine(700, "MFPI");
+const truck = new Truck(engine,true);
+console.log(truck.engine);
+console.log(truck);
 ```
 
 ## Interfaces
@@ -712,21 +727,30 @@ interface IAutoOptions {
 * Interfaces provide a way to enforce a `contract`
 
 ```typescript
-class Engine  implements IEngine {
-    constructor(public horsePower: number, public engineType: string) { }
+class Engine implements IEngine {
+  constructor(public horsePower: number, public engineType: string) { }
 
-    start(callback: (startStatus: boolean, engineType: string) => void) {
-        window.setTimeout(() => { 
-            callback(true, this.engineType);
-        }, 1000); 
-    }
-    
-    stop(callback: (stopStatus: boolean, engineType: string) => void) { 
-        window.setTimeout(() => { 
-            callback(true, this.engineType); 
-        }, 1000);
-    }
+  start(callback: (startStatus: boolean, engineType: string) => void) {
+    window.setTimeout(() => {
+      callback(true, this.engineType);
+    }, 10000);
+  }
+
+  stop(callback: (stopStatus: boolean, engineType: string) => void) {
+    window.setTimeout(() => {
+      callback(true, this.engineType);
+    }, 10000);
+  }
 }
+
+const engine = new Engine(500, "MFPI");
+engine.start((status: boolean, engineType: string) => {
+  console.log(`Started ${engineType} ${status}`);
+});
+
+engine.stop((status: boolean, engineType: string) => {
+    console.log(`Started ${engineType} ${status}`);
+});
 ```
 
 ### Using interface as a Type
@@ -779,7 +803,7 @@ class Truck extends Auto {
     fourByFour: boolean;
 
     constructor(data: ITruckOptions) {
-        super(data);
+        super(data); // This is something interesting!
         this.bedLength = data.bedLength;
         this.fourByFour = data.fourByFour;
     }
@@ -812,18 +836,18 @@ In TypeScript, just as in ECMAScript 2015, any file containing a top-level impor
 * Any declaration (such as a variable, function, class, type alias, or interface) can be exported by adding the export keyword.
 
 ```typescript
-// Code in Validation.ts
+// Code in StringValidator.ts
 export interface StringValidator {
-    isAcceptable(s: string): boolean;
+  isAcceptable(s: string): boolean;
 }
 
 // Code in ZipCodeValidator.ts
+import { StringValidator } from "./StringValidator";
 export const numberRegexp = /^[0-9]+$/;
-
 export class ZipCodeValidator implements StringValidator {
-    isAcceptable(s: string) {
-        return s.length === 5 && numberRegexp.test(s);
-    }
+  isAcceptable(s: string) {
+    return s.length === 5 && numberRegexp.test(s);
+  }
 }
 ```
 #### Export statements
@@ -831,6 +855,8 @@ export class ZipCodeValidator implements StringValidator {
 * Export statements are handy when exports need to be renamed for consumers.
 
 ```typescript
+import { StringValidator } from "./StringValidator";
+export const numberRegexp = /^[0-9]+$/;
 class ZipCodeValidator implements StringValidator {
     isAcceptable(s: string) {
         return s.length === 5 && numberRegexp.test(s);
@@ -886,20 +912,37 @@ import * as validator from "./ZipCodeValidator";
 let myValidator = new validator.ZipCodeValidator();
 ```
 
-#### Import a module for side-effects only
-
-* Though not recommended practice, some modules set up some global state that can be used by other modules. These modules may not have any exports, or the consumer is not interested in any of their exports. To import these modules, use:
-
-```typescript
-import "./my-module.js";
-```
-
 ### Namespaces
 
 * Namespaces (previously internal modules) are used to organize code in TypeScript.
 * Additionally, anywhere the `module` keyword was used when declaring an internal module, the `namespace` keyword can and should be used instead.
 
 * What happens behind the scenes?
+
+```typescript
+namespace App{
+    export class Person {
+        constructor(public name: string, public age: number) { }
+    }
+}
+```
+
+JavaScript code looks like:
+```javascript
+"use strict";
+var App;
+(function (App) {
+    class Person {
+        constructor(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+    }
+    App.Person = Person;
+})(App || (App = {}));
+```
+
+Let us explore further:
 
 ```typescript
 namespace App.Shapes {
@@ -910,17 +953,17 @@ namespace App.Shapes {
 ```
 
 ```JS
+"use strict";
 var App;
 (function (App) {
     var Shapes;
     (function (Shapes) {
-        var Rectangle = /** @class */ (function () {
-            function Rectangle(height, width) {
+        class Rectangle {
+            constructor(height, width) {
                 this.height = height;
                 this.width = width;
             }
-            return Rectangle;
-        }());
+        }
         Shapes.Rectangle = Rectangle;
     })(Shapes = App.Shapes || (App.Shapes = {}));
 })(App || (App = {}));
@@ -952,7 +995,7 @@ namespace Validation {
 }
 ```
 
-* Hard to maintain in a single file. Can be split across files.
+* Hard to maintain in a single file. Can be split across files. The `/// <reference path="..." />` directive is the most common of this group. It serves as a declaration of dependency between files. Triple-slash references instruct the compiler to include additional files in the compilation process.
 
 ```typescript
 // Code in Validation.ts
@@ -1017,7 +1060,7 @@ for (let s of strings) {
 
 * Once there are multiple files involved, we’ll need to make sure all of the compiled code gets loaded. There are two ways of doing this.
     * Compilation into a single file
-        * Concatenated output using the --outFile flag to compile all of the input files into a single JavaScript output file: `tsc --outFile sample.js Test.ts`. The compiler will automatically order the output file based on the reference tags present in the files.
+        * Concatenated output using the `--outFile` flag to compile all of the input files into a single JavaScript output file: `tsc --outFile sample.js Test.ts`. The compiler will automatically order the output file based on the reference tags present in the files.
         * The files can also be specific individually `tsc --outFile sample.js Validation.ts LettersOnlyValidator.ts ZipCodeValidator.ts Test.ts`
     * Per-file compilation (the default) along with `<script>` tag.
         ```HTML
