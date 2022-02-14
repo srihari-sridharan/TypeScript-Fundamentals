@@ -332,7 +332,8 @@ A handy feature of enums is that you can also go from a numeric value to the nam
 ```typescript
 enum Color {Red = 1, Green, Blue}
 let colorName: string = Color[2];
-console.log(colorName); // Displays 'Green' as it's value is 2 above. Remember how it is stored as an object in JS? If not try console.log(Color); now.
+console.log(colorName); // Displays 'Green' as it's value is 2 above.
+// Recollect how it is stored as an object in JS? If not try console.log(Color); now.
 console.log(Color);
 console.log(Color.Blue);
 ```
