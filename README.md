@@ -1090,4 +1090,4 @@ let sq = new polygons.Square(); // Same as 'new Shapes.Polygons.Square()'
 ## Further Reading
 Please consider perusing the [**'TypeScript Handbook'**](https://www.typescriptlang.org/docs/handbook/intro.html) which I used to refer and create this example in addition to adding items based on my experience.
 
-Hope you fell in with ❤️ TypeScript!
+Hope you fell in ❤️ with TypeScript!
