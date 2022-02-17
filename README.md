@@ -750,7 +750,7 @@ engine.start((status: boolean, engineType: string) => {
 });
 
 engine.stop((status: boolean, engineType: string) => {
-    console.log(`Started ${engineType} ${status}`);
+    console.log(`Stopped ${engineType} ${status}`);
 });
 ```
 
